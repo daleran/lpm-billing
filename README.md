@@ -1,2 +1,2 @@
-# lion-pms
-A project management system backend
+# Lion Project Managment System Billing Integration
+Manage clients and billing
