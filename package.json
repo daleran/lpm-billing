@@ -1,0 +1,42 @@
+{
+  "name": "lpm-billing",
+  "version": "1.0.0",
+  "description": "An integration of Toggl time sheets and a client billing system",
+  "main": "index.js",
+  "scripts": {
+    "dev": "./node_modules/.bin/env-cmd -f ./dev.env nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lion-project-management/lpm-billing.git"
+  },
+  "keywords": [
+    "express"
+  ],
+  "author": "Sean Davis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lion-project-management/lpm-billing/issues"
+  },
+  "homepage": "https://github.com/lion-project-management/lpm-billing#readme",
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-config-standard": "^13.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0"
+  },
+  "dependencies": {
+    "env-cmd": "^9.0.3",
+    "express": "^4.17.1",
+    "express-validator": "^6.1.1",
+    "helmet": "^3.20.0",
+    "mongodb": "^3.3.0-beta2",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.19.1",
+    "request": "^2.88.0",
+    "swagger-jsdoc": "^3.3.0",
+    "swagger-ui-express": "^4.0.7"
+  }
+}
