@@ -1,6 +1,6 @@
-import { Entity, model, property, hasMany } from '@loopback/repository';
-import { LineItem, LineItemWithRelations } from './line-item.model';
-import { ClientWithRelations } from './client.model';
+import { Entity, model, property, belongsTo } from '@loopback/repository';
+import { LineItem } from './line-item.model'
+import { Client } from './client.model';
 
 @model({ settings: {} })
 export class Invoice extends Entity {
@@ -10,14 +10,13 @@ export class Invoice extends Entity {
   })
   id?: number;
 
-  @property()
-  clientID?: string
-
   @property({
     type: 'date',
-    required: true,
   })
-  createdOn: string;
+  createdOn?: string;
+
+  @belongsTo(() => Client)
+  clientId: string;
 
   @property({
     type: 'boolean',
@@ -25,15 +24,8 @@ export class Invoice extends Entity {
   })
   sent?: boolean;
 
-  @property({
-    type: 'boolean',
-    default: false,
-  })
-  paid?: boolean;
-
-  @hasMany(() => LineItem)
+  @property.array(LineItem)
   lineItems?: LineItem[];
-
 
   constructor(data?: Partial<Invoice>) {
     super(data);
@@ -41,8 +33,7 @@ export class Invoice extends Entity {
 }
 
 export interface InvoiceRelations {
-  clientID?: ClientWithRelations;
-  lineItems?: LineItemWithRelations[];
+  // describe navigational properties here
 }
 
 export type InvoiceWithRelations = Invoice & InvoiceRelations;

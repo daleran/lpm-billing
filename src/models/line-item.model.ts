@@ -1,5 +1,4 @@
 import { Entity, model, property } from '@loopback/repository';
-import { InvoiceWithRelations } from './invoice.model';
 
 @model({ settings: {} })
 export class LineItem extends Entity {
@@ -9,14 +8,10 @@ export class LineItem extends Entity {
   })
   id?: number;
 
-  @property()
-  invoiceId?: number;
-
   @property({
     type: 'string',
-    required: true,
   })
-  description: string;
+  description?: string;
 
   @property({
     type: 'date',
@@ -37,7 +32,7 @@ export class LineItem extends Entity {
 }
 
 export interface LineItemRelations {
-  invoiceId?: InvoiceWithRelations;
+  // describe navigational properties here
 }
 
 export type LineItemWithRelations = LineItem & LineItemRelations;
