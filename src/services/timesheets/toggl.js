@@ -24,3 +24,11 @@ const invoiceEntries = async (clientId) => {
 const billEntries = async (clientId) => {
 
 }
+
+module.exports = {
+  createClient,
+  updateClient,
+  getUninvoicedEntries,
+  invoiceEntries,
+  billEntries
+}
