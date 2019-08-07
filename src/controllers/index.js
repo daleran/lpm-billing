@@ -1,4 +1,4 @@
-const clientController = require('./clients')
+const clientController = require('./controller.client')
 
 module.exports = {
   clientController
