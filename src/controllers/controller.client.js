@@ -12,8 +12,11 @@ const postClient = async (req, res, next) => {
       res.status(201).send(dbClient)
     }
   } catch (error) {
-    console.log(error)
-    res.status(500).send(error.message) && next(error)
+    let status = 500
+    if (error.statusCode === 400) {
+      status = 400
+    }
+    res.status(status).send(error.message) && next(error)
   }
 }
 

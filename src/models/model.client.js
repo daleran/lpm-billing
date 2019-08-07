@@ -6,7 +6,7 @@ const clientNoIdSchema = {
   properties: {
     name: {
       type: 'string',
-      maxLength: '128'
+      maxLength: 128
     },
     email: {
       type: 'string',
