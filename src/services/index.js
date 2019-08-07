@@ -1,9 +1,9 @@
 const db = require('./db')
-const email = require('./email')
+const msg = require('./msg')
 const timesheets = require('./timesheets')
 
 module.exports = {
   db,
-  email,
+  msg,
   timesheets
 }

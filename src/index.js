@@ -12,6 +12,7 @@ const helmet = require('helmet')
 const morgan = require('morgan')
 
 // Routes
+const { clients } = require('./routes')
 
 const setup = async () => {
   try {
@@ -31,13 +32,16 @@ const setup = async () => {
 
 const configureExpress = () => {
   // A security middleware that automatically sets certain header to avoid known exploites
-  server.use(helmet)
+  server.use(helmet())
 
   // Automatically parse JSON coming and and out of the API into JS objects
   server.use(express.json())
 
   // A logging middleware for logging all http requests
   server.use(morgan('combined'))
+
+  // Add the clients routs
+  server.use('/clients', clients)
 
   // A catch all for any request that do not match any of the routes above
   server.all('*', (req, res) => res.status(404).send('404 Not Found'))

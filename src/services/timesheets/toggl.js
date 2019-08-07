@@ -18,7 +18,7 @@ const createClient = (client) => {
     },
     body: {
       client: {
-        name: client,
+        name: client.name,
         wid: process.env.TOGGL_WS_ID
       }
     },
@@ -28,7 +28,8 @@ const createClient = (client) => {
   return new Promise((resolve, reject) => {
     request(options)
       .then((body) => {
-        resolve(body)
+        client._id = body.data.id
+        resolve(client)
       })
       .catch((error) => {
         reject(error)
