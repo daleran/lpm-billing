@@ -1,5 +1,5 @@
-const clients = require('./clients')
+const clientRoutes = require('./routes.client')
 
 module.exports = {
-  clients
+  clientRoutes
 }
