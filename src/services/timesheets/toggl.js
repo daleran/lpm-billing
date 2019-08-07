@@ -1,27 +1,58 @@
-const request = require('request')
+const request = require('request-promise-native')
+
+const clientsUrl = 'https://www.toggl.com/api/v8/clients'
+// const entiresUrl = 'https://www.toggl.com/api/v8/time_entries'
+// const projectsUrl = 'https://www.toggl.com/api/v8/projects/'
 
 // Create a client in Toggle
-const createClient = async (name) => {
+const createClient = (client) => {
+  const options = {
+    method: 'POST',
+    uri: clientsUrl,
+    auth: {
+      user: process.env.TOGGL_API_KEY,
+      pass: 'api_token'
+    },
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: {
+      client: {
+        name: client,
+        wid: process.env.TOGGL_WS_ID
+      }
+    },
+    json: true
+  }
 
+  return new Promise((resolve, reject) => {
+    request(options)
+      .then((body) => {
+        resolve(body)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
 }
 
 // Update the client's name in Toggl
-const updateClient = async (name) => {
+const updateClient = (client) => {
 
 }
 
 // Get all the time entries that are not marked as invoiced
-const getUninvoicedEntries = async (clientId) => {
+const getUninvoicedEntries = (clientId) => {
 
 }
 
 // Tag all uninvoiced entries as invoiced
-const invoiceEntries = async (clientId) => {
+const invoiceEntries = (clientId) => {
 
 }
 
 // Tag all invoiced entries but not billed entries as billed
-const billEntries = async (clientId) => {
+const billEntries = (clientId) => {
 
 }
 
