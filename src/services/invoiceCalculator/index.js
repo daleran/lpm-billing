@@ -1,7 +1,7 @@
-const milisecondsPerHour = 3600000
+const secondsPerHour = 3600
 
-const calculateCharge = (miliseconds, rate) => {
-  return (miliseconds / milisecondsPerHour) * rate
+const calculateCharge = (seconds, rate) => {
+  return (seconds / secondsPerHour) * rate
 }
 
 const calculateInvoice = (invoice, billedRate) => {
