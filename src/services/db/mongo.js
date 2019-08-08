@@ -35,8 +35,17 @@ const addRecord = (table, record) => {
   })
 }
 
-const getRecord = (recordId) => {
-
+// Gets a single record from the database
+const getRecord = (table, recordId) => {
+  return new Promise((resolve, reject) => {
+    context.db.collection(table).findOne({ _id: recordId })
+      .then((result) => {
+        resolve(result)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
 }
 
 const getRecords = (criteria) => {

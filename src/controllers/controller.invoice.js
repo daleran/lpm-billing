@@ -1,15 +1,19 @@
-const { db, timesheets } = require('../services')
+const { db, timesheets, invoiceCalculator } = require('../services')
 const { invoiceModel } = require('../models')
 
 const generateInvoice = async (req, res, next) => {
+  let invoice = req.body
   try {
-    const valid = invoiceModel.validateGenerateInvoiceIn(req.body)
+    const valid = invoiceModel.validateGenerateInvoiceIn(invoice)
     if (!valid) {
       res.status(400).send(invoiceModel.validateGenerateInvoiceIn.errors)
     } else {
-      const timesheetClient = await timesheets.createClient(req.body)
-      const dbClient = await db.addRecord('clients', timesheetClient)
-      res.status(201).send(dbClient)
+      const timesheetEntries = await timesheets.getEntries(invoice)
+      invoice.lineItems = timesheetEntries
+      const client = await db.getRecord('invoices', invoice.clientId)
+      invoice = invoiceCalculator.calculateInvoice(invoice, client.billedRate)
+      const dbInvoice = await db.addRecord('invoices', invoice)
+      res.status(201).send(dbInvoice)
     }
   } catch (error) {
     let status = 500

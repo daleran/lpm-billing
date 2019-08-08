@@ -12,7 +12,7 @@ const helmet = require('helmet')
 const morgan = require('morgan')
 
 // Routes
-const { clientRoutes } = require('./routes')
+const { clientRoutes, invoiceRoutes } = require('./routes')
 
 const setup = async () => {
   try {
@@ -40,8 +40,9 @@ const configureExpress = () => {
   // A logging middleware for logging all http requests
   server.use(morgan('combined'))
 
-  // Add the clients routs
+  // Add the resource routes
   server.use('/clients', clientRoutes)
+  server.use('/invoices', invoiceRoutes)
 
   // A catch all for any request that do not match any of the routes above
   server.all('*', (req, res) => res.status(404).send('404 Not Found'))
