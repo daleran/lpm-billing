@@ -11,6 +11,7 @@ const calculateInvoice = (invoice, billedRate) => {
     total += entry.charge
   })
   invoice.amountBilled = total
+  return invoice
 }
 
 module.exports = {

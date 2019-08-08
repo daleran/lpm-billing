@@ -10,8 +10,11 @@ const generateInvoice = async (req, res, next) => {
     } else {
       const timesheetEntries = await timesheets.getEntries(invoice)
       invoice.lineItems = timesheetEntries
-      const client = await db.getRecord('invoices', invoice.clientId)
+      const client = await db.getRecord('clients', invoice.clientId)
       invoice = invoiceCalculator.calculateInvoice(invoice, client.billedRate)
+      invoice.amountPaid = 0
+      invoice.createdOn = new Date().toISOString()
+      invoice.updatedOn = new Date().toISOString()
       const dbInvoice = await db.addRecord('invoices', invoice)
       res.status(201).send(dbInvoice)
     }
