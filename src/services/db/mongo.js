@@ -48,16 +48,40 @@ const getRecord = (table, recordId) => {
   })
 }
 
-const getRecords = (criteria) => {
-
+const getRecords = (table, criteria) => {
+  return new Promise((resolve, reject) => {
+    context.db.collection(table).find(criteria).toArray()
+      .then((result) => {
+        resolve(result)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
 }
 
-const updateRecord = (record) => {
-
+const updateRecord = (table, record) => {
+  return new Promise((resolve, reject) => {
+    context.db.collection(table).findOneAndReplace({ _id: record._id }, record)
+      .then((result) => {
+        resolve(record)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
 }
 
-const deleteRecord = (recordId) => {
-
+const deleteRecord = (table, recordId) => {
+  return new Promise((resolve, reject) => {
+    context.db.collection(table).findOneAndDelete({ _id: recordId })
+      .then((result) => {
+        resolve()
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
 }
 
 module.exports = {

@@ -71,7 +71,7 @@ const updateClient = (client) => {
 // Delete a client in Toggl
 const deleteClient = (clientId) => {
   const deleteClient = {
-    method: 'PUT',
+    method: 'DELETE',
     uri: clientsUrl + '/' + clientId,
     auth: {
       user: process.env.TOGGL_API_KEY,
@@ -82,7 +82,7 @@ const deleteClient = (clientId) => {
 
   return new Promise((resolve, reject) => {
     request(deleteClient)
-      .then((body) => {
+      .then(() => {
         resolve()
       })
       .catch((error) => {
