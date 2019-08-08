@@ -38,12 +38,57 @@ const createClient = (client) => {
 
 // Update the client's name in Toggl
 const updateClient = (client) => {
+  const updateClient = {
+    method: 'PUT',
+    uri: clientsUrl + '/' + client._id,
+    auth: {
+      user: process.env.TOGGL_API_KEY,
+      pass: 'api_token'
+    },
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: {
+      client: {
+        name: client.name,
+        wid: process.env.TOGGL_WS_ID
+      }
+    },
+    json: true
+  }
 
+  return new Promise((resolve, reject) => {
+    request(updateClient)
+      .then((body) => {
+        resolve(client)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
 }
 
 // Delete a client in Toggl
 const deleteClient = (clientId) => {
+  const deleteClient = {
+    method: 'PUT',
+    uri: clientsUrl + '/' + clientId,
+    auth: {
+      user: process.env.TOGGL_API_KEY,
+      pass: 'api_token'
+    },
+    json: true
+  }
 
+  return new Promise((resolve, reject) => {
+    request(deleteClient)
+      .then((body) => {
+        resolve()
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
 }
 
 // PRIVATE
