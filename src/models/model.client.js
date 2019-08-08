@@ -1,7 +1,7 @@
 const Ajv = require('ajv')
 const ajv = new Ajv({ allErrors: true })
 
-const clientNoIdSchema = {
+const postClientIn = {
   type: 'object',
   properties: {
     name: {
@@ -19,8 +19,8 @@ const clientNoIdSchema = {
   },
   required: ['name', 'email', 'billedRate']
 }
-const validateClientNoId = ajv.compile(clientNoIdSchema)
+const validatePostClientIn = ajv.compile(postClientIn)
 
 module.exports = {
-  validateClientNoId
+  validatePostClientIn
 }

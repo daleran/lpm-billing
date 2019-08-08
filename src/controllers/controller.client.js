@@ -3,9 +3,9 @@ const { clientModel } = require('../models')
 
 const postClient = async (req, res, next) => {
   try {
-    const valid = clientModel.validateClientNoId(req.body)
+    const valid = clientModel.validatePostClientIn(req.body)
     if (!valid) {
-      res.status(400).send(clientModel.validateClientNoId.errors)
+      res.status(400).send(clientModel.validatePostClientIn.errors)
     } else {
       const timesheetClient = await timesheets.createClient(req.body)
       const dbClient = await db.addRecord('clients', timesheetClient)

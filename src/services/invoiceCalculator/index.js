@@ -10,7 +10,7 @@ const calculateInvoice = (invoice, billedRate) => {
     entry.charge = calculateCharge(entry.duration, billedRate)
     total += entry.charge
   })
-  invoice.total = total
+  invoice.amountBilled = total
 }
 
 module.exports = {

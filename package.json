@@ -4,7 +4,8 @@
   "description": "An integration of Toggl time sheets and a client billing system",
   "main": "index.js",
   "scripts": {
-    "dev": "./node_modules/.bin/env-cmd -f ./dev.env nodemon index.js"
+    "dev": "./node_modules/.bin/env-cmd -f ./dev.env nodemon index.js",
+    "quickTest": "./node_modules/.bin/env-cmd -f ./dev.env node quickTester.js"
   },
   "repository": {
     "type": "git",
