@@ -1,5 +1,4 @@
 const MongoClient = require('mongodb').MongoClient
-
 const mongoOptions = { useNewUrlParser: true }
 
 const context = {

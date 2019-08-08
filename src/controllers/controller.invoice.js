@@ -1,5 +1,6 @@
-const { db, timesheets, invoiceCalculator } = require('../services')
+const { db, timesheets, msg, invoiceCalculator } = require('../services')
 const { invoiceModel } = require('../models')
+const MongoId = require('mongodb').ObjectID
 
 const generateInvoice = async (req, res, next) => {
   let invoice = req.body
@@ -103,16 +104,17 @@ const deleteInvoice = async (req, res, next) => {
     res.status(status).send(error.message) && next(error)
   }
 }
-
+*/
 const sendInvoice = async (req, res, next) => {
   try {
-    const valid = clientModel.validateClientNoId(req.body)
-    if (!valid) {
-      res.status(400).send(clientModel.validateClientNoId.errors)
+    const id = new MongoId(req.params.id)
+    const invoice = await db.getRecord('invoices', id)
+    if (!invoice) {
+      res.status(404).send(`404: Invoice ${id} not found`)
     } else {
-      const timesheetClient = await timesheets.createClient(req.body)
-      const dbClient = await db.addRecord('clients', timesheetClient)
-      res.status(201).send(dbClient)
+      const client = await db.getRecord('clients', invoice.clientId)
+      await msg.send(client, invoice)
+      res.status(200).send('200: Sent')
     }
   } catch (error) {
     let status = 500
@@ -122,7 +124,8 @@ const sendInvoice = async (req, res, next) => {
     res.status(status).send(error.message) && next(error)
   }
 }
-*/
+
 module.exports = {
-  generateInvoice
+  generateInvoice,
+  sendInvoice
 }

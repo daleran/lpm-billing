@@ -29,6 +29,7 @@
     "eslint-plugin-standard": "^4.0.0"
   },
   "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
     "ajv": "^6.10.2",
     "env-cmd": "^9.0.3",
     "express": "^4.17.1",
