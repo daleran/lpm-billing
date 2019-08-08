@@ -1,73 +1,45 @@
 {
   "name": "lpm-billing",
   "version": "1.0.0",
-  "description": "An integration of a Clients DB and Time Sheet software",
-  "keywords": [
-    "loopback-application",
-    "loopback"
-  ],
+  "description": "An integration of Toggl time sheets and a client billing system",
   "main": "index.js",
-  "engines": {
-    "node": ">=8.9"
-  },
   "scripts": {
-    "build": "lb-tsc",
-    "build:watch": "lb-tsc --watch",
-    "clean": "lb-clean dist *.tsbuildinfo",
-    "lint": "npm run prettier:check && npm run eslint",
-    "lint:fix": "npm run eslint:fix && npm run prettier:fix",
-    "prettier:cli": "lb-prettier \"**/*.ts\" \"**/*.js\"",
-    "prettier:check": "npm run prettier:cli -- -l",
-    "prettier:fix": "npm run prettier:cli -- --write",
-    "eslint": "lb-eslint --report-unused-disable-directives .",
-    "eslint:fix": "npm run eslint -- --fix",
-    "pretest": "npm run clean && npm run build",
-    "test": "lb-mocha --allow-console-logs \"dist/__tests__\"",
-    "posttest": "npm run lint",
-    "test:dev": "lb-mocha --allow-console-logs dist/__tests__/**/*.js && npm run posttest",
-    "docker:build": "docker build -t lpm-billing .",
-    "docker:run": "docker run -p 3000:3000 -d lpm-billing",
-    "migrate": "node ./dist/migrate",
-    "prestart": "npm run build",
-    "start": "node -r source-map-support/register .",
-    "prepublishOnly": "npm run test"
+    "dev": "./node_modules/.bin/env-cmd -f ./dev.env nodemon index.js",
+    "quickTest": "./node_modules/.bin/env-cmd -f ./dev.env node quickTester.js"
   },
   "repository": {
-    "type": "git"
+    "type": "git",
+    "url": "git+https://github.com/lion-project-management/lpm-billing.git"
   },
-  "author": "",
-  "license": "",
-  "files": [
-    "README.md",
-    "index.js",
-    "index.d.ts",
-    "dist",
-    "src",
-    "!*/__tests__"
+  "keywords": [
+    "express"
   ],
-  "dependencies": {
-    "@loopback/boot": "^1.5.0",
-    "@loopback/context": "^1.21.1",
-    "@loopback/core": "^1.9.0",
-    "@loopback/openapi-v3": "^1.9.1",
-    "@loopback/repository": "^1.10.1",
-    "@loopback/rest": "^1.16.6",
-    "@loopback/rest-explorer": "^1.3.1",
-    "@loopback/service-proxy": "^1.3.0",
-    "loopback-connector-mongodb": "^4.2.0"
+  "author": "Sean Davis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lion-project-management/lpm-billing/issues"
   },
+  "homepage": "https://github.com/lion-project-management/lpm-billing#readme",
   "devDependencies": {
-    "@loopback/build": "^2.0.6",
-    "source-map-support": "^0.5.13",
-    "@loopback/testlab": "^1.7.2",
-    "@types/node": "^10.14.14",
-    "@typescript-eslint/parser": "^1.13.0",
-    "@typescript-eslint/eslint-plugin": "^1.13.0",
-    "@loopback/eslint-config": "^3.0.0",
     "eslint": "^6.1.0",
-    "eslint-config-prettier": "^6.0.0",
-    "eslint-plugin-eslint-plugin": "^2.1.0",
-    "eslint-plugin-mocha": "^6.0.0",
-    "typescript": "~3.5.3"
+    "eslint-config-standard": "^13.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0"
+  },
+  "dependencies": {
+    "ajv": "^6.10.2",
+    "env-cmd": "^9.0.3",
+    "express": "^4.17.1",
+    "express-validator": "^6.1.1",
+    "helmet": "^3.20.0",
+    "mongodb": "^3.3.0-beta2",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.19.1",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
+    "swagger-jsdoc": "^3.3.0",
+    "swagger-ui-express": "^4.0.7"
   }
 }
