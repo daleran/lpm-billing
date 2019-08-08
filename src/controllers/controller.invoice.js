@@ -28,16 +28,21 @@ const generateInvoice = async (req, res, next) => {
   }
 }
 
-/*
 const updateInvoice = async (req, res, next) => {
+  let invoice = req.body
   try {
-    const valid = clientModel.validateClientNoId(req.body)
+    const valid = invoiceModel.validateUpdateInvoiceIn(invoice)
     if (!valid) {
-      res.status(400).send(clientModel.validateClientNoId.errors)
+      res.status(400).send(invoiceModel.validateUpdateInvoiceIn.errors)
     } else {
-      const timesheetClient = await timesheets.createClient(req.body)
-      const dbClient = await db.addRecord('clients', timesheetClient)
-      res.status(201).send(dbClient)
+      const timesheetEntries = await timesheets.getEntries(invoice)
+      invoice.lineItems = timesheetEntries
+      const client = await db.getRecord('clients', invoice.clientId)
+      invoice = invoiceCalculator.calculateInvoice(invoice, client.billedRate)
+      invoice.updatedOn = new Date().toISOString()
+      invoice._id = new MongoId(invoice._id)
+      const dbInvoice = await db.updateRecord('invoices', invoice)
+      res.status(200).send(dbInvoice)
     }
   } catch (error) {
     let status = 500
@@ -50,13 +55,12 @@ const updateInvoice = async (req, res, next) => {
 
 const getInvoice = async (req, res, next) => {
   try {
-    const valid = clientModel.validateClientNoId(req.body)
-    if (!valid) {
-      res.status(400).send(clientModel.validateClientNoId.errors)
+    const id = new MongoId(req.params.id)
+    const invoice = await db.getRecord('invoices', id)
+    if (!invoice) {
+      res.status(404).send(`404: Invoice ${id} not found`)
     } else {
-      const timesheetClient = await timesheets.createClient(req.body)
-      const dbClient = await db.addRecord('clients', timesheetClient)
-      res.status(201).send(dbClient)
+      res.status(200).send(invoice)
     }
   } catch (error) {
     let status = 500
@@ -69,14 +73,11 @@ const getInvoice = async (req, res, next) => {
 
 const getInvoices = async (req, res, next) => {
   try {
-    const valid = clientModel.validateClientNoId(req.body)
-    if (!valid) {
-      res.status(400).send(clientModel.validateClientNoId.errors)
-    } else {
-      const timesheetClient = await timesheets.createClient(req.body)
-      const dbClient = await db.addRecord('clients', timesheetClient)
-      res.status(201).send(dbClient)
+    if (req.query._id) {
+      req.query._id = new MongoId(req.query._id)
     }
+    const result = await db.getRecords('invoices', req.query)
+    res.status(200).send(result)
   } catch (error) {
     let status = 500
     if (error.statusCode === 400) {
@@ -88,14 +89,9 @@ const getInvoices = async (req, res, next) => {
 
 const deleteInvoice = async (req, res, next) => {
   try {
-    const valid = clientModel.validateClientNoId(req.body)
-    if (!valid) {
-      res.status(400).send(clientModel.validateClientNoId.errors)
-    } else {
-      const timesheetClient = await timesheets.createClient(req.body)
-      const dbClient = await db.addRecord('clients', timesheetClient)
-      res.status(201).send(dbClient)
-    }
+    const id = new MongoId(req.params.id)
+    await db.deleteRecord('invoices', id)
+    res.status(200).send('200: Record Deleted')
   } catch (error) {
     let status = 500
     if (error.statusCode === 400) {
@@ -104,7 +100,7 @@ const deleteInvoice = async (req, res, next) => {
     res.status(status).send(error.message) && next(error)
   }
 }
-*/
+
 const sendInvoice = async (req, res, next) => {
   try {
     const id = new MongoId(req.params.id)
@@ -127,5 +123,9 @@ const sendInvoice = async (req, res, next) => {
 
 module.exports = {
   generateInvoice,
+  getInvoice,
+  getInvoices,
+  updateInvoice,
+  deleteInvoice,
   sendInvoice
 }

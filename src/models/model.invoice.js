@@ -20,6 +20,29 @@ const generateInvoiceIn = {
 }
 const validateGenerateInvoiceIn = ajv.compile(generateInvoiceIn)
 
+const updateInvoiceIn = {
+  type: 'object',
+  properties: {
+    _id: {
+      type: 'string'
+    },
+    clientId: {
+      type: 'number'
+    },
+    billingCycleStart: {
+      type: 'string',
+      format: 'date-time'
+    },
+    billingCycleEnd: {
+      type: 'string',
+      format: 'date-time'
+    }
+  },
+  required: ['_id', 'clientId', 'billingCycleStart', 'billingCycleEnd']
+}
+const validateUpdateInvoiceIn = ajv.compile(updateInvoiceIn)
+
 module.exports = {
-  validateGenerateInvoiceIn
+  validateGenerateInvoiceIn,
+  validateUpdateInvoiceIn
 }
