@@ -5,7 +5,7 @@ const entiresUrl = 'https://www.toggl.com/api/v8/time_entries'
 
 // Create a client in Toggle
 const createClient = (client) => {
-  const options = {
+  const createClient = {
     method: 'POST',
     uri: clientsUrl,
     auth: {
@@ -25,7 +25,7 @@ const createClient = (client) => {
   }
 
   return new Promise((resolve, reject) => {
-    request(options)
+    request(createClient)
       .then((body) => {
         client._id = body.data.id
         resolve(client)
@@ -48,10 +48,10 @@ const deleteClient = (clientId) => {
 
 // PRIVATE
 // Get an array of projects assocaited with the clientId
-const getProjects = (invoiceHeader) => {
+const getProjects = (invoice) => {
   const getClientProjects = {
     method: 'GET',
-    uri: clientsUrl + '/' + invoiceHeader.clientId + '/projects',
+    uri: clientsUrl + '/' + invoice.clientId + '/projects',
     auth: {
       user: process.env.TOGGL_API_KEY,
       pass: 'api_token'
@@ -68,15 +68,40 @@ const getProjects = (invoiceHeader) => {
       })
   })
 }
+// PRIVATE
+// Extract the project name from an array of projects using a projectId
+const extractProjectName = (projectId, projects) => {
+  let found
+  projects.forEach(project => {
+    if (project.id === projectId) {
+      found = project.name
+    }
+  })
+  if (found) {
+    return found
+  } else {
+    return 'No Project'
+  }
+}
 
 // PRIVATE
 // Transform the entries from the Toggl format to the invoice format
 const transformEntries = (entries, projects) => {
-
+  const transformed = []
+  for (let i = 0; i < entries.length; i++) {
+    transformed[i] = {
+      id: entries[i].id,
+      description: extractProjectName(entries[i].pid, projects) + ': ' + entries[i].description,
+      start: entries[i].start,
+      stop: entries[i].stop,
+      duration: entries[i].duration
+    }
+  }
+  return transformed
 }
 
 // Get all the time entries from a client in a date range
-const getEntries = (invoiceHeader) => {
+const getEntries = (invoice) => {
   const getClientEntries = {
     method: 'GET',
     uri: entiresUrl,
@@ -85,15 +110,20 @@ const getEntries = (invoiceHeader) => {
       pass: 'api_token'
     },
     qs: {
-      start_date: invoiceHeader.billingCycleStart,
-      end_date: invoiceHeader.billingCycleEnd
+      start_date: invoice.billingCycleStart,
+      end_date: invoice.billingCycleEnd
     },
     json: true
   }
   return new Promise((resolve, reject) => {
-    request(getClientEntries)
-      .then((body) => {
-        resolve(body)
+    let projects = []
+    getProjects(invoice)
+      .then((projs) => {
+        projects = projs
+        return request(getClientEntries)
+      })
+      .then((rawEntries) => {
+        resolve(transformEntries(rawEntries, projects))
       })
       .catch((error) => {
         reject(error)
