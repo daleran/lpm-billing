@@ -42,25 +42,18 @@ const updateClient = (client) => {
 
 }
 
-// Get all the time entries that are not marked as invoiced
-const getUninvoicedEntries = (clientId) => {
+// Update the client's name in Toggl
+const deleteClient = (clientId) => {
 
 }
 
-// Tag all uninvoiced entries as invoiced
-const invoiceEntries = (clientId) => {
+// Get all the time entries from a client in a date range
+const getEntries = (invoiceHeader) => {
 
 }
 
-// Tag all invoiced entries but not billed entries as billed
-const billEntries = (clientId) => {
-
-}
 
 module.exports = {
   createClient,
-  updateClient,
-  getUninvoicedEntries,
-  invoiceEntries,
-  billEntries
+  updateClient
 }
