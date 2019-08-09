@@ -18,7 +18,7 @@ const buildMessagePlainText = (client, invoice) => {
   invoice.lineItems.forEach(item => {
     message += `${item.start.substring(0, 10)} \t ${item.description} \t ${(item.duration / 3600).toFixed(2)} hours at $${client.billedRate.toFixed(2)} \t $${item.charge.toFixed(2)} \n`
   })
-  message += `\n Total Due: $${invoice.amountBilled}`
+  message += `\n Total Due: $${invoice.amountBilled.toFixed(2)}`
   return message
 }
 
@@ -42,7 +42,7 @@ const buildMessageHTML = (client, invoice) => {
     message += `<tr>\n<td>${item.start.substring(0, 10)}</td>\n<td>${item.description}</td>\n<td>${(item.duration / 3600).toFixed(2)} hours</td>\n<td>$${client.billedRate.toFixed(2)}</td>\n<td>$${item.charge.toFixed(2)}</td>\n</tr>`
   })
   message += `</table>`
-  message += `\n <p>Total Due: $${invoice.amountBilled}</p>`
+  message += `\n <p>Total Due: $${invoice.amountBilled.toFixed(2)}</p>`
   return message
 }
 
