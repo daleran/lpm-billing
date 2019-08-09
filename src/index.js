@@ -45,15 +45,12 @@ const configureExpress = () => {
   // A security middleware that automatically sets certain header to avoid known exploites
   server.use(helmet())
 
-  // Very Basic API Key authorization middleware
-  server.use(auth)
-
   // Automatically parse JSON coming and and out of the API into JS objects
   server.use(express.json())
 
-  // Add the resource routes
-  server.use('/clients', clientRoutes)
-  server.use('/invoices', invoiceRoutes)
+  // Add the resource routes with the authorization middleware
+  server.use('/clients', auth, clientRoutes)
+  server.use('/invoices', auth, invoiceRoutes)
 
   // Add the API documentation endpoint to the root
   server.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
