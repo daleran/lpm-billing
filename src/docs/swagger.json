@@ -1,9 +1,13 @@
 {
   "openapi" : "3.0.0",
   "servers" : [ {
+    "description" : "AWS API Server",
+    "url" : "http://34.200.67.130/"
+  },
+  {
     "description" : "SwaggerHub API Auto Mocking",
     "url" : "https://virtserver.swaggerhub.com/daleran/lpm-billing/1.0.0"
-  } ],
+  }],
   "info" : {
     "description" : "A REST API which integrates project managment time sheets with the client DB.",
     "version" : "1.0.0",
