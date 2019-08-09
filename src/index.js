@@ -42,8 +42,8 @@ const configureExpress = () => {
   // A logging middleware for logging all http requests
   server.use(morgan('combined'))
 
-  // Add the API documentation endpoint
-  server.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
+  // Add the API documentation endpoint to the root
+  server.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
 
   // Add the resource routes
   server.use('/clients', clientRoutes)

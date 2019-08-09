@@ -29,7 +29,7 @@
         "tags" : [ "Clients" ],
         "summary" : "adds a client",
         "operationId" : "addClient",
-        "description" : "Adds a client to the system",
+        "description" : "Adds a client to the db and the time sheet service",
         "responses" : {
           "201" : {
             "description" : "Client created",
@@ -108,7 +108,7 @@
         "tags" : [ "Clients" ],
         "summary" : "updates a client",
         "operationId" : "updateClient",
-        "description" : "Update a client in the system with supplied client",
+        "description" : "Update a client in both the db and time sheet service",
         "responses" : {
           "200" : {
             "description" : "Client updated",
@@ -139,7 +139,7 @@
     "/clients/{clientId}" : {
       "get" : {
         "tags" : [ "Clients" ],
-        "summary" : "Find client by ID",
+        "summary" : "find client by ID",
         "description" : "Returns a single client",
         "operationId" : "getClientById",
         "parameters" : [ {
@@ -173,8 +173,8 @@
       },
       "delete" : {
         "tags" : [ "Clients" ],
-        "summary" : "Delete client by ID",
-        "description" : "Deletes a single client",
+        "summary" : "delete client by ID",
+        "description" : "Delete a single client in both the db and time sheet service",
         "operationId" : "deleteClientById",
         "parameters" : [ {
           "name" : "clientId",
@@ -196,11 +196,77 @@
         }
       }
     },
+    "/invoices" : {
+      "get" : {
+        "tags" : [ "Invoices" ],
+        "summary" : "searches invoices",
+        "operationId" : "searchInvoices",
+        "description" : "By passing in the appropriate options, you can search for\nclients in the system\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "searchString",
+          "description" : "pass an optional search string for looking up inventory",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Invoice"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Invoices" ],
+        "summary" : "generate an updated invoice",
+        "operationId" : "updateInvoice",
+        "description" : "Generate a new invoice based on new parameters and replace the old invoice in the db",
+        "responses" : {
+          "200" : {
+            "description" : "Invoice updated",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Invoice"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Invoice"
+              }
+            }
+          },
+          "description" : "Invoice to update"
+        }
+      }
+    },
     "/invoices/generate" : {
       "post" : {
         "tags" : [ "Invoices" ],
         "summary" : "Generate a new invoice",
-        "description" : "Generate a new invoice from the specified date range",
+        "description" : "Generate a new invoice from the specified date range and save it to the db",
         "operationId" : "generateInvoice",
         "responses" : {
           "201" : {
@@ -248,8 +314,8 @@
     "/invoices/{invoiceId}/send" : {
       "post" : {
         "tags" : [ "Invoices" ],
-        "summary" : "Send the invoice",
-        "description" : "Send the invoice to the client",
+        "summary" : "send the invoice",
+        "description" : "Send the invoice to the client via the messaging service",
         "operationId" : "sendInvoice",
         "parameters" : [ {
           "name" : "invoiceId",
@@ -269,6 +335,65 @@
           },
           "400" : {
             "description" : "invalid input"
+          }
+        }
+      }
+    },
+    "/invoices/{invoiceId}" : {
+      "get" : {
+        "tags" : [ "Invoices" ],
+        "summary" : "get an invoice by id",
+        "description" : "Retrieve an invoice from the db by id",
+        "operationId" : "getInvoice",
+        "parameters" : [ {
+          "name" : "invoiceId",
+          "in" : "path",
+          "description" : "ID of invoice to get",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Invoice retrieved",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Invoice"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Invoice not found"
+          },
+          "400" : {
+            "description" : "invalid input"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Invoices" ],
+        "summary" : "delete invoice by ID",
+        "description" : "Deletes a single invoice in the db",
+        "operationId" : "deleteInvoice",
+        "parameters" : [ {
+          "name" : "invoiceId",
+          "in" : "path",
+          "description" : "ID of invoice to delete",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Record deleted"
+          },
+          "400" : {
+            "description" : "Error deleting record"
           }
         }
       }
