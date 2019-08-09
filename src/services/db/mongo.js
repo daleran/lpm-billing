@@ -10,7 +10,7 @@ const connect = () => {
     if (context.db) {
       resolve()
     } else {
-      new MongoClient(process.env.DB_URL + process.env.DB_NAME, mongoOptions).connect()
+      new MongoClient(process.env.DB_CONN, mongoOptions).connect()
         .then((client) => {
           context.db = client.db(process.env.DB_NAME)
           console.log('Connected to ' + process.env.DB_NAME + ' on ' + process.env.DB_URL)

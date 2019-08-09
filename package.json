@@ -4,6 +4,7 @@
   "description": "An integration of Toggl time sheets and a client billing system",
   "main": "index.js",
   "scripts": {
+    "start": "./node_modules/.bin/env-cmd -f ./prod.env node index.js",
     "dev": "./node_modules/.bin/env-cmd -f ./dev.env nodemon index.js",
     "quickTest": "./node_modules/.bin/env-cmd -f ./dev.env node quickTester.js"
   },
@@ -33,6 +34,7 @@
     "ajv": "^6.10.2",
     "env-cmd": "^9.0.3",
     "express": "^4.17.1",
+    "express-rate-limit": "^5.0.0",
     "express-validator": "^6.1.1",
     "helmet": "^3.20.0",
     "mongodb": "^3.3.0-beta2",
