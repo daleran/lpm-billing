@@ -1,6 +1,8 @@
+// JSON Schema validation middleware
 const Ajv = require('ajv')
 const ajv = new Ajv({ allErrors: true })
 
+// JSON Schema for adding a new interface
 const generateInvoiceIn = {
   type: 'object',
   properties: {
@@ -18,8 +20,10 @@ const generateInvoiceIn = {
   },
   required: ['clientId', 'billingCycleStart', 'billingCycleEnd']
 }
+// Compile the JSON validation functions with ajv
 const validateGenerateInvoiceIn = ajv.compile(generateInvoiceIn)
 
+// JSON Schema for updating an interface
 const updateInvoiceIn = {
   type: 'object',
   properties: {
@@ -40,8 +44,10 @@ const updateInvoiceIn = {
   },
   required: ['_id', 'clientId', 'billingCycleStart', 'billingCycleEnd']
 }
+// Compile the JSON validation functions with ajv
 const validateUpdateInvoiceIn = ajv.compile(updateInvoiceIn)
 
+// Export the validation functions
 module.exports = {
   validateGenerateInvoiceIn,
   validateUpdateInvoiceIn

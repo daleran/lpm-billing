@@ -1,3 +1,5 @@
+// Interface for interacting with a time sheet service
+
 // Create a client in the connected timesheet system
 const createClient = require('./' + process.env.TIMESHEETS).createClient
 
@@ -10,6 +12,7 @@ const deleteClient = require('./' + process.env.TIMESHEETS).deleteClient
 // Get all the time entries from a client in a date range
 const getEntries = require('./' + process.env.TIMESHEETS).getEntries
 
+// Expose the interface
 module.exports = {
   createClient,
   updateClient,

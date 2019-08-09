@@ -1,6 +1,8 @@
+// JSON Schema validation middleware
 const Ajv = require('ajv')
 const ajv = new Ajv({ allErrors: true })
 
+// JSON Schema for enforcing a new client being added to the system
 const postClientIn = {
   type: 'object',
   properties: {
@@ -19,8 +21,10 @@ const postClientIn = {
   },
   required: ['name', 'email', 'billedRate']
 }
+// Compile the JSON validation functions with ajv
 const validatePostClientIn = ajv.compile(postClientIn)
 
+// JSON Schema for a provided clioent object to be updated
 const updateClientIn = {
   type: 'object',
   properties: {
@@ -42,8 +46,10 @@ const updateClientIn = {
   },
   required: ['_id', 'name', 'email', 'billedRate']
 }
+// Compile the JSON validation functions with ajv
 const validateUpdateClientIn = ajv.compile(updateClientIn)
 
+// Export the validation functions
 module.exports = {
   validatePostClientIn,
   validateUpdateClientIn

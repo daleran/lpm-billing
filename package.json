@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "./node_modules/.bin/env-cmd -f ./prod.env node index.js",
-    "dev": "./node_modules/.bin/env-cmd -f ./dev.env nodemon index.js",
+    "dev": "./node_modules/.bin/env-cmd -f ./dev.env nodemon index.js"
   },
   "repository": {
     "type": "git",
