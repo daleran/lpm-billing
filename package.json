@@ -6,7 +6,6 @@
   "scripts": {
     "start": "./node_modules/.bin/env-cmd -f ./prod.env node index.js",
     "dev": "./node_modules/.bin/env-cmd -f ./dev.env nodemon index.js",
-    "quickTest": "./node_modules/.bin/env-cmd -f ./dev.env node quickTester.js"
   },
   "repository": {
     "type": "git",

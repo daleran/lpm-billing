@@ -9,6 +9,7 @@ const port = process.env.PORT || 3000
 
 // Express middleware dependencies
 const rateLimit = require('express-rate-limit')
+const { auth } = require('./services')
 const helmet = require('helmet')
 const morgan = require('morgan')
 const swaggerUi = require('swagger-ui-express')
@@ -34,18 +35,21 @@ const setup = async () => {
 }
 
 const configureExpress = () => {
-  // A rate limiter that will limit the requests per minute from an ip
+  // A logging middleware for logging all http requests
+  server.use(morgan('combined'))
+
+  // A rate limiter that will limit the requests per minute from an ip to avoid DDoS attacks
   const limiter = rateLimit({ windowMs: 60000, max: process.env.RATE_LIMIT })
   server.use(limiter)
 
   // A security middleware that automatically sets certain header to avoid known exploites
   server.use(helmet())
 
+  // Very Basic API Key authorization middleware
+  server.use(auth)
+
   // Automatically parse JSON coming and and out of the API into JS objects
   server.use(express.json())
-
-  // A logging middleware for logging all http requests
-  server.use(morgan('combined'))
 
   // Add the resource routes
   server.use('/clients', clientRoutes)
@@ -58,6 +62,7 @@ const configureExpress = () => {
   server.all('*', (req, res) => res.status(404).send('404 Not Found'))
 }
 
+// Export the server variable and the setup function
 module.exports = {
   setup,
   server
