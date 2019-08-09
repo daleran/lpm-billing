@@ -10,6 +10,8 @@ const port = process.env.PORT || 3000
 // Express middleware dependencies
 const helmet = require('helmet')
 const morgan = require('morgan')
+const swaggerUi = require('swagger-ui-express')
+const swaggerDoc = require('./docs/swagger.json')
 
 // Routes
 const { clientRoutes, invoiceRoutes } = require('./routes')
@@ -39,6 +41,9 @@ const configureExpress = () => {
 
   // A logging middleware for logging all http requests
   server.use(morgan('combined'))
+
+  // Add the API documentation endpoint
+  server.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
 
   // Add the resource routes
   server.use('/clients', clientRoutes)

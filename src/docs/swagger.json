@@ -1,0 +1,381 @@
+{
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "description" : "SwaggerHub API Auto Mocking",
+    "url" : "https://virtserver.swaggerhub.com/daleran/lpm-billing/1.0.0"
+  } ],
+  "info" : {
+    "description" : "A REST API which integrates project managment time sheets with the client DB.",
+    "version" : "1.0.0",
+    "title" : "Lion Project Management Billing API",
+    "contact" : {
+      "email" : "lpmbilling@seandavis.dev"
+    },
+    "license" : {
+      "name" : "MIT",
+      "url" : "https://opensource.org/licenses/MIT"
+    }
+  },
+  "tags" : [ {
+    "name" : "Clients",
+    "description" : "CRUD API for interacting with the Clients DB"
+  }, {
+    "name" : "Invoices",
+    "description" : "API for generating and sending invoices and estimates."
+  } ],
+  "paths" : {
+    "/clients" : {
+      "post" : {
+        "tags" : [ "Clients" ],
+        "summary" : "adds a client",
+        "operationId" : "addClient",
+        "description" : "Adds a client to the system",
+        "responses" : {
+          "201" : {
+            "description" : "Client created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Client"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "invalid input"
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "required" : [ "name", "email", "billedRate" ],
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "example" : "Mr. Client"
+                  },
+                  "email" : {
+                    "type" : "string",
+                    "format" : "email",
+                    "example" : "client@example.com"
+                  },
+                  "billedRate" : {
+                    "type" : "number",
+                    "example" : 35.0
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get" : {
+        "tags" : [ "Clients" ],
+        "summary" : "searches clients",
+        "operationId" : "searchClients",
+        "description" : "By passing in the appropriate options, you can search for\nclients in the system\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "searchString",
+          "description" : "pass an optional search string for looking up inventory",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Client"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Clients" ],
+        "summary" : "updates a client",
+        "operationId" : "updateClient",
+        "description" : "Update a client in the system with supplied client",
+        "responses" : {
+          "200" : {
+            "description" : "Client updated",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Client"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Client"
+              }
+            }
+          },
+          "description" : "Client to update"
+        }
+      }
+    },
+    "/clients/{clientId}" : {
+      "get" : {
+        "tags" : [ "Clients" ],
+        "summary" : "Find client by ID",
+        "description" : "Returns a single client",
+        "operationId" : "getClientById",
+        "parameters" : [ {
+          "name" : "clientId",
+          "in" : "path",
+          "description" : "ID of client to return",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Client"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Id is not a number"
+          },
+          "404" : {
+            "description" : "Client not found"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Clients" ],
+        "summary" : "Delete client by ID",
+        "description" : "Deletes a single client",
+        "operationId" : "deleteClientById",
+        "parameters" : [ {
+          "name" : "clientId",
+          "in" : "path",
+          "description" : "ID of client to delete",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Record deleted"
+          },
+          "400" : {
+            "description" : "Error deleting record"
+          }
+        }
+      }
+    },
+    "/invoices/generate" : {
+      "post" : {
+        "tags" : [ "Invoices" ],
+        "summary" : "Generate a new invoice",
+        "description" : "Generate a new invoice from the specified date range",
+        "operationId" : "generateInvoice",
+        "responses" : {
+          "201" : {
+            "description" : "Invoice generated",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Invoice"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "invalid input"
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "required" : [ "clientId", "billingCycleStart", "billingCycleEnd" ],
+                "properties" : {
+                  "clientId" : {
+                    "type" : "number",
+                    "example" : 175463
+                  },
+                  "billingCycleStart" : {
+                    "type" : "string",
+                    "format" : "date-time",
+                    "example" : "2019-08-03T00:00:00.000Z"
+                  },
+                  "billingCycleEnd" : {
+                    "type" : "string",
+                    "format" : "date-time",
+                    "example" : "2019-08-14T08:00:00.000Z"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/invoices/{invoiceId}/send" : {
+      "post" : {
+        "tags" : [ "Invoices" ],
+        "summary" : "Send the invoice",
+        "description" : "Send the invoice to the client",
+        "operationId" : "sendInvoice",
+        "parameters" : [ {
+          "name" : "invoiceId",
+          "in" : "path",
+          "description" : "ID of invoice to send",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Invoice sent"
+          },
+          "404" : {
+            "description" : "Invoice not found"
+          },
+          "400" : {
+            "description" : "invalid input"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Client" : {
+        "type" : "object",
+        "required" : [ "name", "email", "billedRate" ],
+        "properties" : {
+          "id" : {
+            "type" : "number",
+            "example" : 175463
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "Mr. Client"
+          },
+          "email" : {
+            "type" : "string",
+            "format" : "email",
+            "example" : "client@example.com"
+          },
+          "billedRate" : {
+            "type" : "number",
+            "example" : 35.0
+          }
+        }
+      },
+      "Invoice" : {
+        "type" : "object",
+        "required" : [ "clientId", "billingCycleStart", "billingCycleEnd" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "example" : "5dgsdy6725yhfewh6y"
+          },
+          "clientId" : {
+            "type" : "number",
+            "example" : 175463
+          },
+          "billingCycleStart" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2019-08-03T00:00:00.000Z"
+          },
+          "billingCycleEnd" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2019-08-14T08:00:00.000Z"
+          },
+          "createdOn" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2019-08-08T11:40:00.413Z"
+          },
+          "updatedOn" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2019-08-08T11:40:00.413Z"
+          },
+          "lineItems" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "number",
+                  "example" : 73747658
+                },
+                "description" : {
+                  "type" : "string",
+                  "example" : "Some serious work"
+                },
+                "start" : {
+                  "type" : "string",
+                  "format" : "date-time",
+                  "example" : "2019-08-02T05:00:00+00:00"
+                },
+                "stop" : {
+                  "type" : "string",
+                  "format" : "date-time",
+                  "example" : "2019-08-02T06:35:00+00:00"
+                },
+                "duration" : {
+                  "type" : "integer",
+                  "format" : "seconds",
+                  "example" : 3600
+                },
+                "charge" : {
+                  "type" : "number",
+                  "example" : 51.25
+                }
+              }
+            }
+          },
+          "amountBilled" : {
+            "type" : "number",
+            "example" : 51.25
+          },
+          "amountPaid" : {
+            "type" : "number",
+            "example" : 10
+          }
+        }
+      }
+    }
+  }
+}
