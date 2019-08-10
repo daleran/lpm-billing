@@ -177,8 +177,13 @@ const sendInvoice = async (req, res, next) => {
       // If the record is not found return a 404
       res.status(404).send(`404: Invoice ${id} not found`)
     } else {
-      // Otherwise ge the client by ID from the database
+      // Otherwise get the client by ID from the database
       const client = await db.getRecord('clients', invoice.clientId)
+
+      // Replace the last sent on stamp with the current timestamp
+      // and save it back to the database
+      invoice.lastSentOn = new Date().toISOString()
+      db.updateRecord('invoices', invoice)
 
       // Send the invoice to the client using the messagin service
       await msg.send(client, invoice)
