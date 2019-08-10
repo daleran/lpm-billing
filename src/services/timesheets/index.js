@@ -1,4 +1,5 @@
 // Interface for interacting with a time sheet service
+// The file to pull the function from depends on an enviromental variable
 
 // Create a client in the connected timesheet system
 const createClient = require('./' + process.env.TIMESHEETS).createClient

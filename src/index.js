@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000
 
 // Express middleware dependencies
 const rateLimit = require('express-rate-limit')
-const { auth } = require('./services')
+const { auth } = require('./middleware')
 const helmet = require('helmet')
 const morgan = require('morgan')
 const swaggerUi = require('swagger-ui-express')

@@ -1,5 +1,5 @@
 // Get the various service indexes
-const auth = require('./auth')
+const auth = require('../middleware')
 const db = require('./db')
 const msg = require('./msg')
 const timesheets = require('./timesheets')

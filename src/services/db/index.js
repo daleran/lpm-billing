@@ -1,4 +1,5 @@
 // Interface file for a generic database
+// The file to pull the function from depends on an enviromental variable
 
 // Choose the file to expose functions from an enviromental variable
 const context = require('./' + process.env.DB).context
